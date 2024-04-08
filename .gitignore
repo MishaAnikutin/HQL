@@ -1,0 +1,14 @@
+# vs code conf
+.vscode
+
+# .idea
+.idea
+
+# pycache files
+__pycache__
+
+# venv
+venv
+
+# c output files
+output
