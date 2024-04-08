@@ -12,7 +12,7 @@ QuickFlow - колоночная In-memory СУБД для быстрой пре
 - Быстрая работа
 - Определены основные операторы: +, -, *, /
 - Определены основные математические функции: min, max, pow, log, abs
-- Поддерживать 5 операций: CREATE TABLE, SELECT, INSERT, UPDATE, DELETE
+- Поддерживать 5 операций: CREATE TABLE, SELECT ... WHERE, INSERT, UPDATE, DELETE
 - Поддерживать 4 основных типа: int, char, float, text()
 - Имеет открытый Docker образ, размещенный на Dockerhub 
 
