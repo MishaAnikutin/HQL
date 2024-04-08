@@ -14,6 +14,7 @@ typedef struct {
 
 tcp_server_t* init_server();
 void start_pulling(tcp_server_t* tcp_server);
+void free_server(tcp_server_t* tcp_server);
 
 #endif
 

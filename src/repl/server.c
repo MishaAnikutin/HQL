@@ -58,6 +58,12 @@ init_server()
     return tcp_server;
 }
 
+void
+free_server(tcp_server_t* server) 
+{   
+    free((void*)(server->address.s_addr));
+    free(server);    
+}
 
 
 void 
