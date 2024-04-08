@@ -15,7 +15,7 @@ typedef struct
 {
     struct {
         int code;
-         const char* message;
+        const char* message;
     } err;
     const char* data;
 } response_t;
