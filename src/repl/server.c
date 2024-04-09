@@ -42,30 +42,25 @@ handle_request(char* request)
 }
 
 
-tcp_server_t* 
-InitTCPServer() 
+void 
+InitTCPServer(tcp_server_t** tcp_server) 
 {
-    tcp_server_t* tcp_server = (tcp_server_t*) malloc(sizeof(tcp_server_t));
+    *tcp_server = (tcp_server_t*) malloc(sizeof(tcp_server_t));
 
-    CHECK(tcp_server == NULL, "Ошибка выделения памяти для сервера");
+    CHECK(*tcp_server == NULL, "Ошибка выделения памяти для сервера");
 
     char* port_env = getenv("PORT");
     char* max_connections_env = getenv("MAX_CONNECTIONS");
     char* timeout_seconds_env = getenv("TIMEOUT_SECONDS");
 
-    tcp_server->max_connections = (max_connections_env != NULL) ? atoi(max_connections_env) : MAX_CONNECTIONS;
-    tcp_server->timeout_seconds = (timeout_seconds_env != NULL) ? atoi(timeout_seconds_env) : TIMEOUT_SECONDS;
-    tcp_server->port            = (port_env != NULL)            ? atoi(port_env)            : PORT;
+    (*tcp_server)->max_connections = (max_connections_env != NULL) ? atoi(max_connections_env) : MAX_CONNECTIONS;
+    (*tcp_server)->timeout_seconds = (timeout_seconds_env != NULL) ? atoi(timeout_seconds_env) : TIMEOUT_SECONDS;
+    (*tcp_server)->port            = (port_env != NULL)            ? atoi(port_env)            : PORT;
 
-    tcp_server->address.s_addr = htonl(INADDR_ANY); 
-    tcp_server->socket = socket(AF_INET, SOCK_STREAM, 0);
-    tcp_server->protocol_type = IPPROTO_TCP;
-
-    return tcp_server;
+    (*tcp_server)->address.s_addr = htonl(INADDR_ANY); 
+    (*tcp_server)->socket = socket(AF_INET, SOCK_STREAM, 0);
+    (*tcp_server)->protocol_type = IPPROTO_TCP;
 }
-
-void
-FreeServer(tcp_server_t* server) {free(server);}
 
 void 
 SetupTCPServer(tcp_server_t* tcp_server, int* server_fd, struct sockaddr_in* address) 

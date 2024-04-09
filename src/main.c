@@ -4,14 +4,13 @@
 #include <signal.h>
 #include "../include/server.h"
 
-
-static int server_fd;
-static tcp_server_t* server;
+int server_fd;
+tcp_server_t* server;
 
 void sigint_handler(int sig)
 {
     close(server_fd);
-    FreeServer(server);
+    free(server);
     printf("Server socket closed.\n");
     exit(EXIT_SUCCESS);
 }
@@ -21,7 +20,7 @@ int main()
     signal(SIGINT, sigint_handler);
     printf("The beginning of server initialization\n");
     
-    server = InitTCPServer();
+    InitTCPServer(&server);
 
     if (server == NULL) {
         printf("The server was initialized with an error\n");
