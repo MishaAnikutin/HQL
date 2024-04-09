@@ -15,6 +15,7 @@ def main(host, port):
         client_socket.sendall(bytes(send_data, "utf-8"))
         
         if data := client_socket.recv(1024):
+            data = data.decode('utf-8')
             print(f"Recieved: {repr(data)}")    
     
         client_socket.close()
