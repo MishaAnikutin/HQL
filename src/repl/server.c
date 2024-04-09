@@ -4,8 +4,8 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string.h>
+#include "../../include/server.h"
 
-#include "server.h"
 
 #define PANIC(message) do { perror(message); exit(EXIT_FAILURE); } while (0)
 #define CHECK(condition, message) do { if (condition) { PANIC(message); }} while (0)
@@ -13,7 +13,8 @@
 
 typedef struct 
 {
-    struct {
+    struct 
+    {
         int code;
         const char* message;
     } err;
@@ -22,14 +23,19 @@ typedef struct
 
 
 response_t
-handle_request(const char* request)
+handle_request(char* request)
 {
     response_t response = {
         .err = {.code = 0, .message = NULL},
         .data = NULL
     };
 
+    printf("handled request: ");
+    puts(request);
+
     // Тут будет логика СУБД
+
+    
     response.data = "some kind of work brrrr brrrr...";
 
     return response;
@@ -37,7 +43,7 @@ handle_request(const char* request)
 
 
 tcp_server_t* 
-init_server() 
+InitTCPServer() 
 {
     tcp_server_t* tcp_server = (tcp_server_t*) malloc(sizeof(tcp_server_t));
 
@@ -59,49 +65,46 @@ init_server()
 }
 
 void
-free_server(tcp_server_t* server) 
-{   
-    free((void*)(server->address.s_addr));
-    free(server);    
-}
-
+FreeServer(tcp_server_t* server) {free(server);}
 
 void 
-start_pulling(tcp_server_t* tcp_server) 
+SetupTCPServer(tcp_server_t* tcp_server, int* server_fd, struct sockaddr_in* address) 
 {
-    int server_fd, new_socket;
-    struct sockaddr_in address;
-    int addrlen = sizeof(address);
+    CHECK((*server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1, "Ошибка при создании сокета");
 
-    CHECK((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1, "Ошибка при создании сокета");
+    address->sin_family = AF_INET;
+    address->sin_addr.s_addr = INADDR_ANY;
+    address->sin_port = htons(tcp_server->port);
 
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(tcp_server->port);
-
-    CHECK(bind(server_fd, (struct sockaddr *)&address, sizeof(address)) == -1, "Ошибка при привязке сокета");
-    CHECK(listen(server_fd, tcp_server->max_connections) == -1, "Ошибка при прослушивании сокета");
-
-    printf("the server is running and waiting for connection...\n");
-
-    for (;;) {
-        CHECK((new_socket = accept(server_fd, (struct sockaddr *) &address, (socklen_t*) &addrlen)) == -1, "Ошибка при принятии соединения");
-        
-        char buffer[MAX_BUFFER] = {0};
-
-        read(new_socket, buffer, MAX_BUFFER);
-        response_t response = handle_request(buffer);
-
-        if (response.err.code == -1) {
-            close(new_socket);
-            PANIC("Ошибка в обработке запроса");
-        }
-
-        const char* data = response.data;
-        send(new_socket, data, strlen(data), 0);
-
-        close(new_socket);
-    }
+    CHECK(bind(*server_fd, (struct sockaddr *)address, sizeof(struct sockaddr_in)) == -1, "Ошибка при привязке сокета");
+    CHECK(listen(*server_fd, tcp_server->max_connections) == -1, "Ошибка при прослушивании сокета");
 }
 
+void 
+HandleConnections(int* server_fd, int new_socket, struct sockaddr_in address, int addrlen) 
+{
+    new_socket = accept(*server_fd, (struct sockaddr *) &address, (socklen_t*) &addrlen);
+    CHECK(new_socket == -1, "Ошибка при принятии соединения");
+    
+    char buffer[MAX_BUFFER] = {0};
 
+    read(new_socket, buffer, MAX_BUFFER);
+
+    if (strncmp(buffer, "q\n", 2) == 0) {
+        close(new_socket);
+        close(*server_fd);
+        printf("вот и сказочке конец!");
+    }
+
+    response_t response = handle_request(buffer);
+
+    if (response.err.code == -1) {
+        close(new_socket);
+        PANIC("Ошибка в обработке запроса");
+    }
+
+    const char* data = response.data;
+    send(new_socket, data, strlen(data), 0);
+
+    close(new_socket);
+}
