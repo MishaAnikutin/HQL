@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../../include/engine.h"
+#include "../models/engine.h"
+
 
 #define PANIC(message) do { perror(message); exit(EXIT_FAILURE); } while (0)
 
@@ -26,7 +27,6 @@ createTable(char* name, column_t* columns[], size_t n_col)
 column_t*
 createColumn(char* name, coltype_t c_stype) 
 {
-    // TODO: аналогично, malloc
     column_t* column = (column_t*) malloc(sizeof(column_t));
     
     column->c_name = name;

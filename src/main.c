@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
-#include "../include/server.h"
+#include "models/server.h"
 
 int server_fd;
 tcp_server_t* server;

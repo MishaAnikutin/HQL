@@ -4,7 +4,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string.h>
-#include "../../include/server.h"
+#include "../models/server.h"
 
 
 #define PANIC(message) do { perror(message); exit(EXIT_FAILURE); } while (0)
@@ -85,7 +85,7 @@ HandleConnections(int* server_fd, int new_socket, struct sockaddr_in address, in
 
     read(new_socket, buffer, MAX_BUFFER);
 
-    if (strncmp(buffer, "q\n", 2) == 0) {
+    if (strncmp(buffer, "q();\n", 5) == 0) {
         close(new_socket);
         close(*server_fd);
         printf("вот и сказочке конец!");
