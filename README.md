@@ -90,18 +90,30 @@ QuickFlow - быстрая колоночная In-memory СУБД для ETL п
 в папке ./src находится весь код программы
 ```bash
 .src
+├── main.c 
 ├── Makefile
 ├── core
+│   ├── connections.c
+│   ├── pipeline.c
 │   ├── engine.c
 │   └── parser.c
-├── main.c
 └── repl
-    └── server.c
-    └── print_data.c
-    └── cli.c
+│   └── server.c
+│   └── print_data.c
+│   └── cli.c
+└── models
+    ├── connections.h
+    ├── pipeline.h
+    ├── engine.h
+    ├── parser.h
+    └── server.h
 ```
 ### Core
-в папке core будет реализован парсер запросов, в engine будет реализован API для работы с обьектами СУБД.
+в папке core все контроллеры:
+- engine с API для работы с обьектами БД
+- parser с парсером запросов
+- pipeline с API для работы с конвеерами задач для данных
+- connections с API для работы с соединениями
 
 ### Есть сейчас: 
 - В engine.c реализованы функции createTable, createColumn
@@ -113,9 +125,11 @@ QuickFlow - быстрая колоночная In-memory СУБД для ETL п
 - Реализован TCP сервер. Выводит информацию по инициализации сервера. При завершении программы сигналом SIGINT закрывает сокет и удаляет сервер
 
 ### Models
-В папке ./models находятся заголовочные файлы с представлением моделей данных
+В папке ./models находятся заголовочные файлы с представлением моделей обьектов
 ```bash
 . models
+├── connections.h
+├── pipeline.h
 ├── engine.h
 ├── parser.h
 └── server.h
