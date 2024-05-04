@@ -33,10 +33,11 @@ handle_request(char* request)
     printf("handled request: ");
     puts(request);
 
-    // Тут будет логика СУБД
-
+    // Тут будет парсинг запроса
+    // Ловля его ошибок
+    // И при их отсутствии - выполнение запроса
     
-    response.data = "some kind of work brrrr brrrr...";
+    response.data = "some kind of work brrrr brrrr..."; // пока заглушка
 
     return response;
 }

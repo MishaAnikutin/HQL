@@ -25,5 +25,3 @@ parseRequest (const char* request)
         return NULL;
     }
 }
-
-table_t* parseCreateSTMT(const char* request) {}
