@@ -4,25 +4,27 @@
 #include <assert.h>
 #include <inttypes.h>
 
-#include "../../../models/engine/ddl.h"
+#include "create.h"
 
 #define PANIC(message) do { perror(message); exit(EXIT_FAILURE); } while (0)
 
 
 table_t* 
-createTable(char* t_name, column_t* columns[], size_t n_col)
+createTable(char* t_name, column_t* columns[MAX_COLUMNS], size_t n_col)
 {   
-    // TODO: нужно будет подумать над выбором malloc
-    // потому что сейчас ограничение в 2 Гб на таблицу
+    // TODO: нужно будет подумать над выбором malloc, потому что сейчас ограничение в 2 Гб на таблицу
     table_t* table = (table_t*) malloc(sizeof(table_t));
 
     if (table == NULL) 
         PANIC("Ошибка выделения памяти для таблицы\n");
     
-    size_t i = 0;
-    for (size_t i = 0; i < n_col; ++i) {
+    table->columns[MAX_COLUMNS] = (column_t*) malloc(n_col * sizeof(column_t)); 
+
+    if (table->columns == NULL) 
+        PANIC("Ошибка выделения памяти для массива столбцов\n");
+
+    for (size_t i = 0; i < n_col; i++)
         table->columns[i] = columns[i];
-    }    
 
     table->t_name   = t_name;
     table->shape[0] = 0;     
