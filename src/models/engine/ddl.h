@@ -1,5 +1,5 @@
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef DDL_H
+#define DDL_H
 
 #include <stdio.h>
 
@@ -18,28 +18,25 @@ ColumnsTypes
 };
 
 
-typedef struct           // Structure of column
+typedef struct                          // Structure of column
 Column
 {
-    char* c_name;        // column name
-    enum ColumnsTypes c_stype; // column string of type
-    void* data;          // column data
-    int   data_size;     // count row
-    int   data_capacity; // max data capacity
+    char*       c_name;                 // column name
+    enum        ColumnsTypes c_stype;   // column string of type
+    void*       data;                   // column data
+    int         data_size;              // count row
+    int         data_capacity;          // max data capacity
 } column_t;
 
 
 #define MAX_COLUMNS 1024
-typedef struct               // Structure of table 
+
+typedef struct                          // Structure of table 
 Table
 {                            
-    char*        t_name;     // table name
+    char*        t_name;                // table name
     column_t*    columns[MAX_COLUMNS];  // list of columns (hashmap in future)
-    size_t       shape[2];   // [n_cols, n_rows]
+    size_t       shape[2];              // [n_cols, n_rows]
 } table_t;
-
-
-table_t* createTable(char* t_name, column_t* columns[], size_t n_col);
-column_t* createColumn(char* c_name, enum ColumnsTypes c_stype);
 
 #endif
