@@ -5,8 +5,7 @@
 #include <inttypes.h>
 
 #include "drop.h"
-
-#define PANIC(message) do { perror(message); exit(EXIT_FAILURE); } while (0)
+#include "../../errors/throw_error.h"
 
 
 void 

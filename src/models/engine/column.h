@@ -1,5 +1,5 @@
-#ifndef DDL_H
-#define DDL_H
+#ifndef COLUMN_H
+#define COLUMN_H
 
 #include <stdio.h>
 
@@ -35,15 +35,5 @@ struct Column                           // Structure of column
     int64_t     capacity;               // max data capacity (dynamic)
 } column_t;
 
-
-#define MAX_COLUMNS 1024
-
-typedef                                 // Structure of table 
-struct Table
-{                            
-    char*        t_name;                // table name
-    column_t**   columns;               // list of columns (hashmap in future)
-    size_t       shape[2];              // [n_cols, n_rows]
-} table_t;
 
 #endif
