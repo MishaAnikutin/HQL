@@ -10,7 +10,7 @@
 
 
 table_t* 
-createTable(char* t_name, column_t* columns[MAX_COLUMNS], size_t n_col)
+createTable(char* t_name, column_t** columns, size_t n_col)
 {   
     // TODO: нужно будет подумать над выбором malloc, потому что сейчас ограничение в 2 Гб на таблицу
     table_t* table = (table_t*) malloc(sizeof(table_t));
@@ -18,7 +18,7 @@ createTable(char* t_name, column_t* columns[MAX_COLUMNS], size_t n_col)
     if (table == NULL) 
         PANIC("Ошибка выделения памяти для таблицы\n");
     
-    table->columns[MAX_COLUMNS] = (column_t*) malloc(n_col * sizeof(column_t)); 
+    table->columns = (column_t**) malloc(n_col * sizeof(column_t*)); 
 
     if (table->columns == NULL) 
         PANIC("Ошибка выделения памяти для массива столбцов\n");
@@ -43,27 +43,23 @@ createColumn(char* c_name, enum ColumnsTypes c_stype)
         PANIC("Ошибка выделения памяти для столбца\n");
 
     column->c_name = c_name;
-
+    column->capacity = INIT_COLUMN_CAPACITY;
+    
     switch (c_stype) {
         case QF_INT:
-            column->data_size = sizeof(INT_T);
-            column->data_capacity = sizeof(INT_T) * 2;
-            column->data = (INT_T*) malloc(sizeof(INT_T));
+            column->data.int_data = (INT_T*) malloc(INIT_COLUMN_CAPACITY * sizeof(INT_T));
             break;
         case QF_UINT:
-            column->data_size = sizeof(UINT_T);
-            column->data_capacity = sizeof(UINT_T) * 2;
-            column->data = (UINT_T*) malloc(sizeof(UINT_T));
+            column->data.uint_data = (UINT_T*) malloc(INIT_COLUMN_CAPACITY * sizeof(UINT_T));
             break;
         case QF_CHAR:
-            column->data_size = sizeof(CHAR_T);
-            column->data_capacity = sizeof(CHAR_T) * 2;
-            column->data = (CHAR_T*) malloc(sizeof(CHAR_T));
+            column->data.char_data = (CHAR_T*) malloc(INIT_COLUMN_CAPACITY * sizeof(CHAR_T));
+            break;
+        case QF_TEXT:
+            column->data.text_data = (CHAR_T**) malloc(INIT_COLUMN_CAPACITY * sizeof(CHAR_T*));
             break;
         case QF_FLOAT:
-            column->data_size = sizeof(FLOAT_T);
-            column->data_capacity = sizeof(FLOAT_T) * 2;
-            column->data = (FLOAT_T*) malloc(sizeof(FLOAT_T));
+            column->data.float_data = (FLOAT_T*) malloc(INIT_COLUMN_CAPACITY * sizeof(FLOAT_T));
             break;
         default: 
             PANIC("Unsupported data type\n"); break;

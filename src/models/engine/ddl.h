@@ -3,39 +3,46 @@
 
 #include <stdio.h>
 
-#define INT_T int 
+#define INT_T int64_t 
 #define UINT_T unsigned int  
-#define CHAR_T char 
-#define FLOAT_T float 
+#define CHAR_T char
+#define FLOAT_T double 
 
-enum
-ColumnsTypes
+
+enum ColumnsTypes
 {
     QF_INT,
     QF_UINT,
     QF_CHAR,
-    QF_FLOAT
+    QF_FLOAT,
+    QF_TEXT
 };
 
+#define INIT_COLUMN_CAPACITY 8
 
-typedef struct                          // Structure of column
-Column
+typedef
+struct Column                           // Structure of column
 {
     char*       c_name;                 // column name
     enum        ColumnsTypes c_stype;   // column string of type
-    void*       data;                   // column data
-    int         data_size;              // count row
-    int         data_capacity;          // max data capacity
+    union {
+        char*      char_data;
+        char**     text_data;
+        double*    float_data;
+        int64_t*   int_data;
+        unsigned int*  uint_data;
+    } data;
+    int64_t     capacity;               // max data capacity (dynamic)
 } column_t;
 
 
 #define MAX_COLUMNS 1024
 
-typedef struct                          // Structure of table 
-Table
+typedef                                 // Structure of table 
+struct Table
 {                            
     char*        t_name;                // table name
-    column_t*    columns[MAX_COLUMNS];  // list of columns (hashmap in future)
+    column_t**   columns;               // list of columns (hashmap in future)
     size_t       shape[2];              // [n_cols, n_rows]
 } table_t;
 
