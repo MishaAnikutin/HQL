@@ -76,38 +76,38 @@
 
 1. Запрос приходит по TCP подключению или по CLI
 
-Далее, он проверяется лексически и синтаксически, если все хорошо, то раскладывается на команды в ядро.
+2. Далее, он проверяется лексически и синтаксически, если все хорошо, то раскладывается на команды в ядро.
 
-Парсер отправляет запрос в DDL через API:
-```C
-create_response_t 
-create(
-    char* t_name,
-    char* column_names[MAX_COLUMNS], 
-    char* column_types[MAX_COLUMNS],
-    size_t n_col,
-    bool if_not_exists
-)
-```
+3. Парсер отправляет запрос в DDL через API:
+   ```C
+   create_response_t 
+   create(
+       char* t_name,
+       char* column_names[MAX_COLUMNS], 
+       char* column_types[MAX_COLUMNS],
+       size_t n_col,
+       bool if_not_exists
+   )
+   ```
 
-Для общения ядра и парсера реализованы модели:
+4. Для общения ядра и парсера реализованы модели:
 
-```C
-typedef
-struct CreateResponse
-{
-    enum DDLStatusCode status_code,
-    char* message;
-} create_response_t;
-```
-Сам движок QF изолирован от парсера слоем DDL. Внутри DDL происходят вызовы API движка QF:
+   ```C
+   typedef
+   struct CreateResponse
+   {
+       enum DDLStatusCode status_code,
+       char* message;
+   } create_response_t;
+   ```
+   Сам движок QF изолирован от парсера слоем DDL. Внутри DDL происходят вызовы API движка QF:
 
-```C
-column_t* createColumn(char* c_name, enum ColumnsTypes c_stype);
-table_t* createTable(char* t_name, column_t** columns, size_t n_col);
-```
+   ```C
+   column_t* createColumn(char* c_name, enum ColumnsTypes c_stype);
+   table_t* createTable(char* t_name, column_t** columns, size_t n_col);
+   ```
 
-т.е. на этом слое уже оперируют структурами движка, а не строками запроса
+   т.е. на этом слое уже оперируют структурами движка, а не строками запроса
 
 ## Примеры
 В папке ./examples лежат примеры (написанные на языке Python)
