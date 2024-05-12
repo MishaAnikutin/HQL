@@ -71,11 +71,13 @@
 - DDL, DML, AST, Parser, engine (весь домен) находится в ./core
 - Для общения между слоями написаны структуры в ./models
 
-Рассмотрим на примере работы CREATE TABLE:
+Рассмотрим работу на примере команды `CREATE TABLE users (username TEXT, salary UINT);`:
 
-1. Запрос приходит по TCP подключению, или по CLI, например: `CREATE TABLE users (username TEXT, salary UINT);`.
+1. Запрос приходит по TCP подключению или по CLI
 
-Далее, он проверяется на синтаксис и раскладывается на команды в ядро. Парсер отправляет запрос в DDL/DML через API:
+Далее, он проверяется лексически и синтаксически, если все хорошо, то раскладывается на команды в ядро.
+
+Парсер отправляет запрос в DDL через API:
 ```C
 create_response_t 
 create(
@@ -97,9 +99,7 @@ struct CreateResponse
     char* message;
 } create_response_t;
 ```
-
-Сам движок QF изолирован от парсера слоем DML/DDL. Внутри DML/DDL происходят вызовы API движка QF:
-
+Сам движок QF изолирован от парсера слоем DDL. Внутри DDL происходят вызовы API движка QF:
 
 ```C
 column_t* createColumn(char* c_name, enum ColumnsTypes c_stype);
