@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
-#include "../../models/engine/tablespace.h"
-#include "../../models/engine/table.h"
+#include "tablespace.h"
+#include "table.h"
 
 #define PANIC(message) do { perror(message); exit(EXIT_FAILURE); } while (0)
 
@@ -42,15 +43,25 @@ getTableFromTablespace(char* name)
     
     for (int i = 0; i < tablespace->n_tables; i++)
     {
-        printf("\t{%i}\ttable: %s\n", i, tablespace->tables[i]->t_name);
-
         if (strcmp(tablespace->tables[i]->t_name, name) == 0)
             return tablespace->tables[i];
     }
 
-    PANIC("Не удалось получить таблицу\n");
+    return NULL; // Не удалось получить таблицу
 }
 
+bool
+checkTableInTablespace(char* name)
+{
+    tablespace_t* tablespace = getTablespaceInstance();
+    
+    for (int i = 0; i < tablespace->n_tables; i++)
+    {
+        if (strcmp(tablespace->tables[i]->t_name, name) == 0)
+            return true;
+    }
+    return false;
+}
 
 void
 removeTableFromTablespace(char* name)
@@ -61,12 +72,11 @@ removeTableFromTablespace(char* name)
     {
         if (strcmp(tablespace->tables[i]->t_name, name) == 0)
         {
-            // Если нашли table с name, нужно сдвинуть все дальнейшие элементы на 1 влево
+            // Если нашли таблицу, нужно сдвинуть все дальнейшие элементы на 1 влево
             for (int j = i; j < tablespace->n_tables - 1; j++)
                 tablespace->tables[j] = tablespace->tables[j + 1];
-
-            tablespace->n_tables--;
-            return;
+            
+            tablespace->n_tables--; return;
         }
     }
 

@@ -20,20 +20,25 @@ enum ColumnsTypes
 
 #define INIT_COLUMN_CAPACITY 8
 
+union DataTypes
+{
+        CHAR_T*  char_data;
+        CHAR_T** text_data;
+        FLOAT_T* float_data;
+        INT_T*   int_data;
+        UINT_T*  uint_data;
+};
+
 typedef
 struct Column                           // Structure of column
 {
     char*       c_name;                 // column name
-    enum        ColumnsTypes c_stype;   // column string of type
-    union {
-        char*      char_data;
-        char**     text_data;
-        double*    float_data;
-        int64_t*   int_data;
-        unsigned int*  uint_data;
-    } data;
+    enum        ColumnsTypes c_stype;   // column type (string alias)
+    union       DataTypes data;         // column data
     int64_t     capacity;               // max data capacity (dynamic)
 } column_t;
 
+column_t* createColumn(char* c_name, enum ColumnsTypes c_stype);
+column_t* createColumnWithValue(char* c_name, enum ColumnsTypes c_stype, union DataTypes data, int64_t capacity);
 
 #endif

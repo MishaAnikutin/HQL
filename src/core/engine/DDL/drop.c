@@ -11,7 +11,7 @@
 void 
 dropTable(table_t* table)
 {   
-    for (size_t i = 0; i < table->shape[1]; ++i) {
+    for (size_t i = 0; i < table->cols; ++i) {
         switch (table->columns[i]->c_stype)
         {
             case QF_CHAR:

@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../DDL/create.h"
-#include "../DDL/drop.h"
+// #include "../DDL/create.h"
+// #include "../DDL/drop.h"
+#include "../column.h"
+#include "../table.h"
 
 
 int main() {
-    printf("CREATE TABLE users (uid INT, name TEXT, surname TEXT, age INT, salary UINT, experience TEXT);\n\n");
     column_t* columns[6] = {
         createColumn("uid",     QF_INT),
         createColumn("name",    QF_TEXT),
@@ -22,7 +23,7 @@ int main() {
     
     printf("Table: %s\n", table->t_name);
     
-    for (size_t i = 0; i < table->shape[1]; ++i) {
+    for (size_t i = 0; i < table->cols; ++i) {
         printf(
             "- Column's name: %s\tcolumn's type: %d\n",
             table->columns[i]->c_name,
