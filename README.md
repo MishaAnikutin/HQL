@@ -28,6 +28,20 @@ _возможно, потом будет форк на C++ для более у�
    - [ ] abs
 
 ### Core:
+- [ ] Реализован API для работы с движком QF:
+   - [x] **Tablespace:**
+      + [x] getTablespaceInstance
+      + [x] addTableToTablespace
+      + [x] getTableFromTablespace
+      + [x] removeTableFromTablespace
+      + [x] checkTableInTablespace
+   - [x] **Table:**
+      + [x] createTable
+      + [x] getColumnFromTable
+      + [x] dropTable  
+   - [x] **Column:**
+      + [x] createColumn
+      + [x] dropColumn  
 - [ ] Реализован API для задач DDL:
    - [x] CREATE
    - [x] DROP
@@ -37,7 +51,7 @@ _возможно, потом будет форк на C++ для более у�
    - [x] SELECT 
    - [ ] UPDATE 
    - [ ] DELETE
-- [ ] Поддерживать 4 основных типа:
+- [ ] Столбцы поддерживают 6 основных типов:
    - [x] INT
    - [x] UINT
    - [x] CHAR
