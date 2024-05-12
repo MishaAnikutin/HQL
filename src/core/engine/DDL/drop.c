@@ -5,37 +5,19 @@
 #include <inttypes.h>
 
 #include "drop.h"
-#include "../../errors/throw_error.h"
 
+#include "../table.h"
+#include "../tablespace.h"
+
+#define PANIC(message) do { perror(message); exit(EXIT_FAILURE); } while (0)
 
 void 
-dropTable(table_t* table)
+drop(char* t_name)
 {   
-    for (size_t i = 0; i < table->cols; ++i) {
-        switch (table->columns[i]->c_stype)
-        {
-            case QF_CHAR:
-                free(table->columns[i]->data.char_data);
-                break;
-            case QF_TEXT:
-                free(table->columns[i]->data.text_data);
-                break;
-            case QF_FLOAT:
-                free(table->columns[i]->data.float_data);
-                break;
-            case QF_INT:
-                free(table->columns[i]->data.int_data);
-                break;
-            case QF_UINT:
-                free(table->columns[i]->data.uint_data);
-                break;
-            default:
-                // ну сюда уж точно не попадем, так что забьем
-                printf("wtf??\n\n");
-                break;
-        } 
-        
-        free(table->columns[i]);
-    }
-    free(table);
+    table_t* table = getTableFromTablespace(t_name);
+
+    if (table == NULL)
+        PANIC("Не удалось удалить таблицу: такой таблицы нет");
+    
+    dropTable(table);
 }

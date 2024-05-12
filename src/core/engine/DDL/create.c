@@ -5,23 +5,38 @@
 #include <inttypes.h>
 
 #include "create.h"
-#include "../../../models/engine/tablespace.h"
+
+#include "../table.h"
+#include "../column.h"
+#include "../tablespace.h"
 
 #define PANIC(message) do { perror(message); exit(EXIT_FAILURE); } while (0)
 
 
-table_t* 
-create(char* t_name, column_t** columns, size_t n_col, bool if_not_exists)
+void 
+create(
+    char* t_name,
+    char* column_names[MAX_COLUMNS], 
+    enum ColumnsTypes column_types[MAX_COLUMNS],
+    size_t n_col,
+    bool if_not_exists
+)
 {   
-    if (if_not_exists)
+    if (if_not_exists && checkTableInTablespace(t_name))
+        PANIC("Table with name already exisis");
+
+    column_t* columns[MAX_COLUMNS];
+
+    for (size_t i = 0; i < n_col; ++i)
     {
-        if (checkTableInTablespace(t_name))
-            PANIC("Table with name already exisis");
+        column_t* column_i = createColumn(column_names[i], column_types[i]);
+        if (column_i == NULL) 
+            PANIC("Unsupported data type");
+
+        columns[i] = column_i;
     }
 
     table_t* table = createTable(t_name, columns, n_col);
-    
-    // TODO: нужно добавить обработку ошибок при создании таблиц
-    
-    return table;
+
+    addTableToTablespace(table);
 }

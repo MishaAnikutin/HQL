@@ -17,7 +17,15 @@ createColumnWithValue(char* c_name, enum ColumnsTypes c_stype, union DataTypes d
     if (column == NULL) 
         PANIC("Ошибка выделения памяти для столбца\n");
     
-    column->c_name = c_name;
+    column->c_name = (char*) malloc((strlen(c_name) + 1) * sizeof(char));
+
+    if (column->c_name == NULL) {
+        free(column);
+        PANIC("Ошибка выделения памяти для имени столбца\n");
+    }
+    
+    strcpy(column->c_name, c_name);
+
     column->capacity = capacity;
 
     switch (c_stype) {
@@ -37,7 +45,8 @@ createColumnWithValue(char* c_name, enum ColumnsTypes c_stype, union DataTypes d
             column->data.float_data = data.float_data;
             break;
         default: 
-            PANIC("Unsupported data type\n"); break;
+            PANIC("Unsupported data type\n");
+            break;
     }
 
     column->c_stype = c_stype;
@@ -53,7 +62,14 @@ createColumn(char* c_name, enum ColumnsTypes c_stype)
     if (column == NULL) 
         PANIC("Ошибка выделения памяти для столбца\n");
 
-    column->c_name = c_name;
+    column->c_name = (char*) malloc((strlen(c_name) + 1) * sizeof(char));
+
+    if (column->c_name == NULL) {
+        free(column);
+        PANIC("Ошибка выделения памяти для имени столбца\n");
+    }
+    
+    strcpy(column->c_name, c_name);
     column->capacity = INIT_COLUMN_CAPACITY;
     
     switch (c_stype) {
@@ -73,7 +89,8 @@ createColumn(char* c_name, enum ColumnsTypes c_stype)
             column->data.float_data = (FLOAT_T*) malloc(INIT_COLUMN_CAPACITY * sizeof(FLOAT_T));
             break;
         default: 
-            PANIC("Unsupported data type\n"); break;
+            return NULL;
+            break;
     }
 
     column->c_stype = c_stype;

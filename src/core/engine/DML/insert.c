@@ -16,13 +16,12 @@ insert(char *t_name, union DataTypes *row)
     if (table == NULL)
         PANIC("Нет такой таблицы");
     
-    size_t n = table->shape[1];
+    size_t n = table->rows;
 
-    for (int i = 0; i < table->shape[0]; ++i)
+    for (int i = 0; i < table->cols; ++i)
     {
-        // if (table->shape[0] + 1 >= table->columns[i]->capacity)
-        table->columns[i]->data[shape[1] + 1] = row[i];
+        table->columns[i]->data[n + 1] = row[i];
     }
 
-    table->shape[1]++; 
+    table->rows++; 
 }

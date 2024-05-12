@@ -4,7 +4,16 @@
 #include <stdbool.h>
 
 #include "../table.h"
+#include "../column.h"
+#include "../tablespace.h"
 
-table_t* create(char* t_name, column_t** columns, size_t n_col, bool if_not_exists);
+
+void create(
+    char* t_name,
+    char* column_names[MAX_COLUMNS], 
+    enum ColumnsTypes column_types[MAX_COLUMNS],
+    size_t n_col,
+    bool if_not_exists
+);
 
 #endif

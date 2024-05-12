@@ -2,6 +2,7 @@
 #define TABLESPACE_H
 
 #include <stdio.h>
+#include <stdbool.h>
 #include "table.h"
 
 #define MAX_TABLES 1024
@@ -18,5 +19,6 @@ tablespace_t* getTablespaceInstance();
 void addTableToTablespace(table_t* table);
 table_t* getTableFromTablespace(char* tablename);
 void removeTableFromTablespace(char* tablename);
+bool checkTableInTablespace(char* tablename);
 
 #endif

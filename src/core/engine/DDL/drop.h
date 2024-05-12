@@ -1,8 +1,6 @@
 #ifndef DROP_H
 #define DROP_H
 
-#include "../table.h"
-
-void dropTable(table_t* table);
+void drop(char* t_name);
 
 #endif 
