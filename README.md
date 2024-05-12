@@ -91,29 +91,11 @@ struct CreateResponse
 
 
 ```C
-if (if_not_exists && checkTableInTablespace(t_name))
-   return response_builder(DDLStatusCode.NAME_ERROR, "Table with name already exisis");
-
-column_t* columns[MAX_COLUMNS];
-
-for (size_t i = 0; i < n_col; ++i)
-{
-   column_t* column_i = createColumn(column_names[i], column_types[i]);
-   if (column_i == NULL) 
-      return response_builder(DDLStatusCode.TYPE_ERROR, "Unsupported data type");
-
-
-   columns[i] = column_i;
-}
-
-table_t* table = createTable(t_name, columns, n_col);
-
-if (table == NULL)
-   return response_builder(DDLStatusCode.MEMORY_ERROR, "Memory error");
-
-addTableToTablespace(table);
+column_t* createColumn(char* c_name, enum ColumnsTypes c_stype);
+table_t* createTable(char* t_name, column_t** columns, size_t n_col);
 ```
 
+т.е. на этом слое уже оперируют структурами движка, а не строками запроса
 
 ## Примеры
 В папке ./examples лежат примеры (написанные на языке Python)
