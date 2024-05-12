@@ -70,7 +70,7 @@ create_response_t
 create(
     char* t_name,
     char* column_names[MAX_COLUMNS], 
-    enum ColumnsTypes column_types[MAX_COLUMNS],
+    char* column_types[MAX_COLUMNS],
     size_t n_col,
     bool if_not_exists
 )
