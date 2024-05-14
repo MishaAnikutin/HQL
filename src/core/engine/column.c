@@ -55,14 +55,14 @@ createColumnWithValue(char* c_name, enum ColumnsTypes c_stype, union DataTypes d
 
 
 column_t*
-createColumn(char* c_name, enum ColumnsTypes c_stype) 
+createColumn(name_t c_name, enum ColumnsTypes c_stype) 
 {
     column_t* column = (column_t*) malloc(sizeof(column_t));
     
     if (column == NULL) 
         PANIC("Ошибка выделения памяти для столбца\n");
 
-    column->c_name = (char*) malloc((strlen(c_name) + 1) * sizeof(char));
+    column->c_name = (name_t) malloc((strlen(c_name) + 1) * sizeof(char));
 
     if (column->c_name == NULL) {
         free(column);

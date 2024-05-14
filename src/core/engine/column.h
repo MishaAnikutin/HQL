@@ -38,7 +38,9 @@ struct Column                           // Structure of column
     int64_t     capacity;               // max data capacity (dynamic)
 } column_t;
 
-column_t* createColumn(char* c_name, enum ColumnsTypes c_stype);
-column_t* createColumnWithValue(char* c_name, enum ColumnsTypes c_stype, union DataTypes data, int64_t capacity);
+typedef char* name_t;                   // Имя таблицы/столбца
+
+column_t* createColumn(name_t c_name, enum ColumnsTypes c_stype);
+column_t* createColumnWithValue(name_t c_name, enum ColumnsTypes c_stype, union DataTypes data, int64_t capacity);
 
 #endif
